@@ -259,7 +259,7 @@ BrokenLineConnector.prototype.paint = function(dims, ctx){
           days = $(o).data('block-data').days
           re = DateUtils.resize(s, days, cellWidth);
           var between =0;
-          if(s.toString() != re["start"].toString()) {
+          if($(o).data('block-data').start.toString() != re["start"].toString()) {
             $(o).data('block-data').start = re["start"];
             between = DateUtils.daysBetween(s, re["start"]);
           }
