@@ -39,6 +39,49 @@ BrokenLineConnector.prototype.paint = function(dims, ctx){
   ctx.stroke();
 };
 
+jsPlumb.Defaults.DragOptions = { cursor: 'pointer', zIndex:2000 };
+jsPlumb.Defaults.PaintStyle = { strokeStyle:'#666' };
+jsPlumb.Defaults.EndpointStyle = { width:20, height:16, strokeStyle:'#666' };
+jsPlumb.Defaults.Endpoint = new jsPlumb.Endpoints.Rectangle();
+jsPlumb.Defaults.Anchors = [jsPlumb.Anchors.TopCenter, jsPlumb.Anchors.TopCenter];
+
+var dpOptions = {
+  tolerance:'touch',
+  hoverClass:'dropHover',
+  activeClass:'dragActive'
+};
+var endpointColor = 'red';
+
+var leftEndpoint = {
+  endpoint:new jsPlumb.Endpoints.Rectangle(),
+  style:{ width:10, height:5, fillStyle:endpointColor },
+  isSource:true,
+  scope:'leftConnection',
+  connectorStyle : {
+    gradient:{stops:[[0, endpointColor], [0.5, '#09098e'], [1, endpointColor]]},
+    lineWidth:2,
+    strokeStyle:endpointColor
+  },
+  //connector: new jsPlumb.Connectors.Bezier(63),
+  connector: new BrokenLineConnector([[.5, 0], [.5, 1]]),
+  isTarget:true,
+  dropOptions : dpOptions
+};
+
+var rightEndpoint = {
+  endpoint:new jsPlumb.Endpoints.Dot({radius:5}),
+  style:{ strokeStyle:"blue" },
+  isSource:true,
+  scope:'rightConnection',
+  connectorStyle:{ strokeStyle:"blue", lineWidth:8 },
+  connector: new jsPlumb.Connectors.Bezier(63),
+  //connector: new BrokenLineConnector([[.5, 0], [.5, 1]]),
+  isTarget:true,
+  dropOptions : dpOptions
+};
+
+
+
 (function (jQuery) {
   jQuery.fn.ganttView = function (options) {
     var els = this
@@ -234,15 +277,25 @@ BrokenLineConnector.prototype.paint = function(dims, ctx){
     connectBlocks: function (data, options) {
       for (var i = 0; i < data.length; i++) {
         var d = data[i]
+
+        jsPlumb.addEndpoints("ganttview-block-" + d.id, [
+          $.extend({ anchor:jsPlumb.makeAnchor(1, 0.5) }, leftEndpoint),
+          $.extend({ anchor:jsPlumb.makeAnchor(0, 0.5) }, rightEndpoint)
+        ]);
+
         if (!("depends" in d)) continue
         for (var j = 0; j < d.depends.length; j++) {
           var depend = d.depends[j]
+          /*
           jsPlumb.connect(jQuery.extend({
             source: "ganttview-block-" + d.id,
             target: "ganttview-block-" + depend
           }, options))
+          */
         }
       }
+
+//      jsPlumb.draggable($(".ganttview-block"));
     },
 
     addEvent: function(o, cellWidth, change) {
