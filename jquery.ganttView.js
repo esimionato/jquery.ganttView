@@ -293,6 +293,7 @@ BrokenLineConnector.prototype.paint = function(dims, ctx){
           re = DateUtils.resize($(o).data('block-data').start.clone(), newDays, cellWidth);
           console.debug("cnt: %o, s %o, w: %o", newDays, re["start"], re["width"]);
           $(o).data('block-data').days = newDays;
+          $(o).find(".ganttview-block-text").text(newDays)
           $(o).css("width", re["width"]);
 
           change($(o), rs, rdistance)
