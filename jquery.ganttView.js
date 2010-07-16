@@ -270,6 +270,7 @@ BrokenLineConnector.prototype.paint = function(dims, ctx){
           $(o).css("margin-left", n+"px").css("left", "0px").css("width", re["width"]);
           ui.position.left=0
           change($(o), s, distance)
+          jsPlumb.repaintEverything();
         }
       }).resizable({
         containment: 'parent',
@@ -295,6 +296,7 @@ BrokenLineConnector.prototype.paint = function(dims, ctx){
           $(o).css("width", re["width"]);
 
           change($(o), rs, rdistance)
+          jsPlumb.repaintEverything();
         }
       });
     }
