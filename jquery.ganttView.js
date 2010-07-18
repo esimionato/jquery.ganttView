@@ -58,8 +58,10 @@ BrokenLineConnector.prototype.paint = function(dims, ctx){
                    new jsPlumb.Endpoints.Triangle({width: 8, height: 6})],
        endpointStyle: {fillStyle: "red"}
     }, options.connection);
-    if(opts.days && opts.days.length > 0) ChartLang.days = opts.days;
-    if(opts.monthNames && opts.monthNames.length > 0) ChartLang.monthNames = opts.monthNames;
+    if(opts.chartLang){
+        if(opts.chartLang.days && opts.chartLang.days.length > 0) ChartLang.days = opts.chartLang.days;
+        if(opts.chartLang.monthNames && opts.chartLang.monthNames.length > 0) ChartLang.monthNames = opts.chartLang.monthNames;
+    }
     els.each(function () {
       var container = jQuery(this)
       var div = jQuery("<div>", { "class": "ganttview" })
