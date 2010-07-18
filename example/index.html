@@ -32,9 +32,8 @@
       $("#ganttChart").ganttView({
         data: ganttData,
         cellWidth: cw,
-        start: new Date(2010,01,01),
-        end: new Date(2010,05,15),
-        slideWidth: 500,
+        start: new Date(2010,1,1),
+        end: new Date(2010,5,15),
         blockClick: function() {
           console.log("click");
         },
@@ -43,7 +42,7 @@
 //        $('<p>Edit task.</p>').dialog({modal: true})
         },
         change: function(o,s,m) {
-//            console.log(o.data('block-data').id);
+//        console.log(o.data('block-data').id);
         }
       })
     })
