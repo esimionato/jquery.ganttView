@@ -14,16 +14,13 @@ end: date
 cellWidth: number
 cellHeight: number
 slideWidth: number
-
+};
+*/
 var ChartLang = {
     days: "days",
               monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 };
-*/
-var ChartLang = {
-    days: "人日",
-    monthNames: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"]
-};
+
 
 // points: array of [x, y] (float) representing relative break points
 function BrokenLineConnector(points){ this.points = points || [] }
@@ -61,7 +58,8 @@ BrokenLineConnector.prototype.paint = function(dims, ctx){
                    new jsPlumb.Endpoints.Triangle({width: 8, height: 6})],
        endpointStyle: {fillStyle: "red"}
     }, options.connection);
-
+    if(opts.days && opts.days.length > 0) ChartLang.days = opts.days;
+    if(opts.monthNames && opts.monthNames.length > 0) ChartLang.monthNames = opts.monthNames;
     els.each(function () {
       var container = jQuery(this)
       var div = jQuery("<div>", { "class": "ganttview" })
@@ -97,7 +95,10 @@ BrokenLineConnector.prototype.paint = function(dims, ctx){
   var Chart = {
 
     getMonths: function (start, end) {
-      start = Date.parse(start); end = Date.parse(end)
+      start.setMonth(start.getMonth()-1);
+      end.setMonth(end.getMonth()-1);
+      start = Date.parse(start); end = Date.parse(end);
+
       var months = []; months[start.getMonth()] = [start]
       var last = start
       while (last.compareTo(end) == -1) {
@@ -184,6 +185,8 @@ BrokenLineConnector.prototype.paint = function(dims, ctx){
       var rowIdx = 0
       for (var i = 0; i < data.length; i++) {
         var series = data[i]
+        series.start.setMonth(series.start.getMonth()-1);
+        series.end.setMonth(series.end.getMonth()-1);
         if(!series.days) {
           series.days = DateUtils.daysBetween(series.start, series.end)
         }
@@ -333,6 +336,7 @@ BrokenLineConnector.prototype.paint = function(dims, ctx){
   var DateUtils = {
     daysBetween: function (start, end) {
       if (!start || !end) { return 0; }
+
       start = Date.parse(start); end = Date.parse(end)
       if (start.getYear() == 1901 || end.getYear() == 8099) { return 0; }
       var count = 0, date = start.clone()
